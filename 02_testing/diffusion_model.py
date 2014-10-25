@@ -16,8 +16,6 @@ def energy(density, coeff=1.0):
   # Make sure input is an array
   density = array(density)
 
-  print density
-
   # of the right kind (integer). Unless it is zero length, in which case type does not matter.
   if density.dtype.kind != 'i' and len(density) > 0:
     raise TypeError("Density should be an array of *integers*.")

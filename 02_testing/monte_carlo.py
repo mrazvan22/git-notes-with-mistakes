@@ -2,6 +2,8 @@ from diffusion_model import energy
 import matplotlib.pyplot as plt
 import random as rnd
 import math
+import numpy
+from mpl_toolkits.mplot3d import Axes3D
 
 def move_particle(particle_array):
 
@@ -25,9 +27,33 @@ def move_particle(particle_array):
 
   return particle_array
 
+def print_density_3d(densities):
+  iterations, n = numpy.shape(densities)
+  fig = plt.figure()
+  ax = fig.add_subplot(111, projection='3d')
+  colours = ['r', 'g', 'b', 'y'] * iterations
+  for z in range(iterations):
+    c = colours[z]
+    xs = numpy.arange(n)
+    ys = densities[z]
+
+    # define the colours
+    cs = [c] * len(xs)
+
+    ax.bar(xs, ys, zs=z, zdir='y', color=cs, alpha=0.6)
+
+  ax.set_xlabel('particle array')
+  ax.set_ylabel('iteration')
+  ax.set_zlabel('# particles')
+
+  plt.show()
+
 def monte_carlo(density, temp):
 
-  iterations = 500
+  n = len(density)
+  iterations = 30
+  densities = numpy.zeros(shape=(iterations+1,n))
+  densities[0] = density
   for i in range(iterations):
     energy_0 = energy(density)
 
@@ -42,9 +68,13 @@ def monte_carlo(density, temp):
       if (p0 > p1):
         density = density_1
 
-    plt.plot(density)
+    densities[i + 1] = density
+
+  return densities
 
 
-monte_carlo([2,4,6,5,1,5], 10.0)
+densities = monte_carlo([2,4,6,5,1,5], 10.0)
+print densities
 
+print_density_3d(densities)
 

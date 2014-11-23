@@ -2,6 +2,8 @@
 seconds 1 seconds
 milliseconds 0.001 seconds
 microseconds 0.000001 seconds
+minutes 60 seconds
+hours 3600 seconds
 meters 1 meters
 decameters 10 meters
 hectometers 100 meters

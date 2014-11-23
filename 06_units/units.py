@@ -29,6 +29,13 @@ class Unit(object):
 
   def add(self, other_unit):
     new_unit = Unit(self.unit, self.value)
+    try:
+      # if input is number convert to unit first
+      float(other_unit)
+      other_unit = Unit(self.unit, other_unit)
+    except Exception:
+      pass
+
     if (other_unit.unit == self.unit):
       new_unit.value += other_unit.value
     else:
@@ -36,12 +43,19 @@ class Unit(object):
         new_unit.unit = self.get_SI_unit()
         new_unit.value = self.to_SI().value + other_unit.to_SI().value
       else:
-        raise(Exception)
+        raise(IncompatibleUnitsError(other_unit.unit, self.unit))
 
     return new_unit
 
   def multiply(self, other_unit):
     new_unit = Unit(self.unit, self.value)
+    try:
+      # if input is number convert to unit first
+      float(other_unit)
+      other_unit = Unit(self.unit, other_unit)
+    except Exception:
+      pass
+
     if (other_unit.unit == self.unit):
       new_unit.value *= other_unit.value
     else:
@@ -49,9 +63,22 @@ class Unit(object):
         new_unit.unit = self.get_SI_unit()
         new_unit.value = self.to_SI().value * other_unit.to_SI().value
       else:
-        raise(Exception)
+        raise(IncompatibleUnitsError(other_unit.unit, self.unit))
 
     return new_unit
+
+  def equal(self, other_unit):
+    if (Unit.units_compatible(self.unit, other_unit.unit)):
+      return abs(self.to_SI().value - other_unit.to_SI().value) < 0.00001
+    else:
+      raise(IncompatibleUnitsError(other_unit.unit, self.unit))
+
+
+  def __radd__(self, other):
+    return self.__add__(other)
+
+  def __rmul__(self, other):
+    return self.__mul__(other)
 
   def __add__(self, other):
     return self.add(other)
@@ -59,9 +86,15 @@ class Unit(object):
   def __mul__(self, other):
     return self.multiply(other)
 
+  def __eq__(self, other):
+    return self.equal(other)
+
   def to(self, new_unit_label):
     if(new_unit_label in Unit.value_map.keys()):
       return Unit(new_unit_label, self.value * Unit.value_map[self.unit] / Unit.value_map[new_unit_label])
+    else:
+      raise(IncompatibleUnitsError(new_unit_label, self.unit))
+
 
   def to_SI(self):
     return self.to(self.get_SI_unit())
@@ -82,6 +115,13 @@ class Length(Unit):
   def __init__(self, unit, value):
     self.super(unit,value)
 
+
+class IncompatibleUnitsError(Exception):
+  def __init__(self, unit1, unit2):
+    self.unit1 = unit1
+    self.unit2 = unit2
+  def __str__(self):
+    return "Incompatible units " + unit1 + ", " + unit2 + "\n"
 
 
 #Unit.load_units_from_config('units.yaml')

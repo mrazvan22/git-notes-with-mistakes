@@ -47,4 +47,24 @@ def test_mult():
   assert_almost_equal(mult_m.value, 0.008)
   assert_equal(mult_m.unit, 'meters')
 
+def test_eq():
+  two_cm = Unit('centimeters', 2)
+  two_cm_in_dm = Unit('decimeters', 0.2)
+  assert(two_cm == two_cm_in_dm)
 
+  two_grams = Unit('grams',2)
+
+  with assert_raises(IncompatibleUnitsError):
+    two_grams == two_cm
+
+def given_tests():
+  meters = Unit('meters',1)
+  kilometers = Unit('kilometers',1)
+  seconds = Unit('seconds',1)
+  minutes = Unit('minutes', 1)
+
+  assert(5*meters == 0.005*kilometers)
+  assert((60*seconds).to('minutes').value==1)
+  assert((60*seconds).to('minutes').unit=='minutes')
+  with assert_raises(IncompatibleUnitsError):
+    5*meters+2*seconds

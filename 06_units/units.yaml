@@ -1,10 +1,13 @@
-seconds 1
-milliseconds 0.001
-microseconds 0.000001
-meters 1
-decameters 10
-hectometers 100
-kilometers 1000
-decimeters 0.1
-centimeters 0.01
-millimeters 0.001
+#Unit quantity SI_unit
+seconds 1 seconds
+milliseconds 0.001 seconds
+microseconds 0.000001 seconds
+meters 1 meters
+decameters 10 meters
+hectometers 100 meters
+kilometers 1000 meters
+decimeters 0.1 meters
+centimeters 0.01 meters
+millimeters 0.001 meters
+grams 1 grams
+kilograms 1000 grams

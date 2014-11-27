@@ -1,2 +1,8 @@
 *.pyc
 *.swp
+03_libraries/greengraph2/
+04_bad_boids/
+06_units/build/
+06_units/dist/
+06_units/scripts/
+06_units/units.egg-info/

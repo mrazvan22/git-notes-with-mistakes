@@ -8,14 +8,14 @@ class Unit(object):
     with open(filename, 'r') as f:
       next(f)
       for line in f:
-        print line
+        #print line
         [key, value, SI_unit] = line.split(' ')
         value_dict[key] = float(value)
         SI_dict[key] = SI_unit[:-1]
 
     return [value_dict, SI_dict]
 
-  [value_map, SI_map] = load_units_from_config('units.yaml')
+  [value_map, SI_map] = load_units_from_config('units/units.yaml')
 
   def __init__(self, unit, value):
     if(unit in Unit.value_map.keys()):
@@ -126,4 +126,13 @@ class IncompatibleUnitsError(Exception):
 
 #Unit.load_units_from_config('units.yaml')
 
+def main():
+  a = Unit('meters', 1)
+  a = a + 1
+  print a.unit
+  print a.value
+  
+
+if __name__ == "__main__":
+  main()
 

@@ -23,9 +23,10 @@ is_animated = False
 
 ATTENUATION_MIDDLE = 0.01
 SPEED_CONSTANT = 0.125
-NR_BOIDS = 50
+NR_BOIDS = 2000
 AWAY_LIMIT = 100
 MATCH_SPEED_LIMIT = 10000
+NR_ITERATIONS = 1
 
 def animate(frame):
    update_boids(boids)
@@ -132,8 +133,7 @@ if __name__ == "__main__":
     plt.show()
   else:
     print 'Timing the script'
-    nr_iterations = 500
-    for i in range(nr_iterations):
+    for i in range(NR_ITERATIONS):
       update_boids(boids)
 
     print start_time

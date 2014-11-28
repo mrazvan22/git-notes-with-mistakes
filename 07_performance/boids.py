@@ -1,4 +1,15 @@
 """  Terribly good code for performance purposes! by Razvan Valentin Marinescu
+
+  I did the following:
+
+  1. refactored the code
+  2. modularised the code in different functions
+  2. changed positions and velocities from lists to numpy arrays
+  3. vectorised the 3 functions: fly_middle, fly_away and match_speed
+  4. made the three functions pass arrays by reference, so that no speed in lost in copying over data
+  5. separated timing logic from animation logic (control behaviour using is_animated flag, see below) 
+  6. added unit tests for cross-checking between slow and fast functions
+
 """
 
 from matplotlib import pyplot as plt
@@ -7,6 +18,7 @@ import random
 import numpy as np
 import time
 
+# set this to true if you want to see a 2-sec animation, otherwise just time the code
 is_animated = False
 
 ATTENUATION_MIDDLE = 0.01
@@ -30,6 +42,7 @@ def fly_middle(xvs, yvs, xs,ys):
 
   return (xvs, yvs)
 
+# optimised version of fly_middle
 def fly_middle_opt(xvs, yvs, xs,ys):
   NR_BOIDS = len(xs)
   for i in range(NR_BOIDS):
@@ -47,6 +60,7 @@ def fly_away(xvs, yvs, xs,ys):
   return (xvs, yvs)
 
 
+# optimised version of fly_away
 def fly_away_opt(xvs, yvs, xs,ys):
   for i in range(len(xs)):
     close_points = (xs - xs[i])**2 + (ys - ys[i])**2 < AWAY_LIMIT      
@@ -64,6 +78,7 @@ def match_speed(xvs,yvs,xs,ys):
   return (xvs, yvs)
 
 
+# optimised version of match_speed
 # note that this implementation is not exactly the same as the one before, because the original implementation updates xvs at each j iteration, which is quite bad and undesirable. That resulted in 'quick update' bias for the first eagles in the list.
 def match_speed_opt(xvs,yvs,xs,ys):
   NR_BOIDS = len(xs)
@@ -96,10 +111,15 @@ def update_boids(boids):
 if __name__ == "__main__":
   start_time = time.time()
 
-  boids_x=np.array([random.uniform(-450,50.0) for x in range(NR_BOIDS)])
-  boids_y=np.array([random.uniform(300.0,600.0) for x in range(NR_BOIDS)])
-  boid_x_velocities=np.array([random.uniform(0,10.0) for x in range(NR_BOIDS)])
-  boid_y_velocities=np.array([random.uniform(-20.0,20.0) for x in range(NR_BOIDS)])
+  #boids_x=np.array([random.uniform(-450,50.0) for x in range(NR_BOIDS)])
+  #boids_y=np.array([random.uniform(300.0,600.0) for x in range(NR_BOIDS)])
+  #boid_x_velocities=np.array([random.uniform(0,10.0) for x in range(NR_BOIDS)])
+  #boid_y_velocities=np.array([random.uniform(-20.0,20.0) for x in range(NR_BOIDS)])
+
+  boids_x=np.random.random_sample((NR_BOIDS,)) * (50 + 450) - 450
+  boids_y=np.random.random_sample((NR_BOIDS,)) * (600 - 300) + 300
+  boid_x_velocities=np.random.random_sample((NR_BOIDS,)) * (10 - 0) + 0
+  boid_y_velocities=np.random.random_sample((NR_BOIDS,)) * (20 + 20) - 20
   boids=(boids_x,boids_y,boid_x_velocities,boid_y_velocities)
 
 
